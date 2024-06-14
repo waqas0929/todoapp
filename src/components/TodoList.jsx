@@ -1,10 +1,12 @@
 import React from "react";
-
 import Task from "./Task";
 
 const TodoList = ({
   todoList,
+  editingIndex,
   handleEdit,
+  handleSave,
+  handleChange,
   handleToggleComplete,
   handleDelete,
 }) => {
@@ -14,13 +16,17 @@ const TodoList = ({
         <Task
           key={index}
           task={task}
-          handleEdit={() => handleEdit(index)}
-          handleToggleComplete={() => handleToggleComplete(index)}
-          handleDelete={() => handleDelete(index)}
+          index={index}
+          isEditing={index === editingIndex}
+          handleEdit={handleEdit}
+          handleSave={handleSave}
+          handleChange={handleChange}
+          handleToggleComplete={handleToggleComplete}
+          handleDelete={handleDelete}
         />
       ))}
     </ul>
   );
 };
 
-export default TodoList
+export default TodoList;

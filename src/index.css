@@ -53,13 +53,13 @@ button {
 .editButton,
 .completeButton,
 .undoButton,
-.deleteButton {
+.deleteButton,
+.saveButton {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
-  margin-right: 10px;
   margin-top: 10px;
 }
 
@@ -75,14 +75,17 @@ button {
 
 .editButton,
 .completeButton,
-.undoButton {
+.undoButton,
+.saveButton {
   background-color: #ffc107;
   color: #212529;
+  margin-right: 10px;
 }
 
 .editButton:hover,
 .completeButton:hover,
-.undoButton:hover {
+.undoButton:hover,
+.saveButton:hover {
   background-color: #e0a800;
 }
 
@@ -116,6 +119,7 @@ form {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
 }
 
 .todoInput {
@@ -126,7 +130,6 @@ form {
   font-size: 14px;
   margin-top: 10px;
   margin-right: 10px;
-  max-width: calc(90% - 90px);
 }
 
 label {
@@ -143,10 +146,34 @@ input[type="text"] {
   border: 1px solid #dddddd;
   border-radius: 8px;
   font-size: 14px;
-  width: calc(100% - 84px);
-  max-width: 100%;
-  word-wrap: break-word;
+  width: 100%;
   margin-top: 20px;
+  box-sizing: border-box;
+}
+
+input[type="date"] {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical; /* Allows the user to resize the textarea vertically */
+  min-height: 50px;
+  margin-top: 20px;
+}
+textarea::placeholder{
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif ;
 }
 
 ul {
@@ -157,6 +184,7 @@ ul {
 
 li {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   padding: 8px;
@@ -167,6 +195,32 @@ li:last-child {
   border-bottom: none;
 }
 
-li span {
+li span,
+li textarea {
   flex-grow: 1;
+  margin-right: 10px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+
+.task-completed {
+  text-decoration: line-through;
+}
+.task-summary{
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: lightgray;
+  color: #333;
+  display: flex;
+  justify-content: space-between
+  
+}
+.task-summary p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+.pending{
+  color: red;
 }

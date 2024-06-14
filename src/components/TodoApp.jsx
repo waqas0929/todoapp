@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-// const { useState } = require("react");
 import TodoList from "./TodoList";
 import AddTodo from "./AddTodo";
 
 const TodoApp = () => {
-  const [todo, setTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(-1);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   useEffect(() => {
     localStorage.setItem("todoList", JSON.stringify(todoList));
@@ -16,40 +18,74 @@ const TodoApp = () => {
     if (storedTodoList) {
       setTodoList(storedTodoList);
     }
-  }, [todoList]);
-
-  const handleAddTodo = (newTodo) => {
-    setTodoList([{ task: newTodo, completed: false }, ...todoList]);
+  }, []);
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+    setEditingIndex[-1]
   };
 
-  const handleEdit = (index,) => {
-    const newTask  = prompt ("Enter new task", todoList[index].task)
-  if(newTask !== null && newTask.trim() !== ""){
-    const newTodoList = [...todoList];
-    newTodoList[index].task = newTask;
+  const handleAddTodo = (newTodo) => {
+    const newTodoList = { ...todoList };
+    if (!newTodoList[selectedDate]) {
+      newTodoList[selectedDate] = [];
+    }
+    newTodoList[selectedDate] = [
+      { task: newTodo, complete: false },
+      ...newTodoList[selectedDate],
+    ];
     setTodoList(newTodoList);
-  }
+  };
+
+  const handleEdit = (index) => {
+    setEditingIndex(index);
+  };
+  const handleSave = (index) => {
+    setEditingIndex(-1);
+  };
+  const handleChange = (e, index) => {
+    const newTodoList = {...todoList};
+    newTodoList[selectedDate][index].task = e.target.value;
+    setTodoList(newTodoList);
   };
 
   const handleToggleComplete = (index) => {
-    const newTodoList = [...todoList];
-    newTodoList[index].completed = !newTodoList[index].completed;
+    const newTodoList = {...todoList};
+    newTodoList[selectedDate][index].completed =
+      !newTodoList[selectedDate][index].completed;
     setTodoList(newTodoList);
   };
 
   const handleDelete = (index) => {
-    const newTodoList = [...todoList];
-    newTodoList.splice(index, 1);
+    const newTodoList = {...todoList};
+    newTodoList[selectedDate].splice(index, 1);
     setTodoList(newTodoList);
   };
+
+  const totalTasks = todoList[selectedDate]?.length || 0;
+  const completedTasks = todoList[selectedDate]?.filter(task=> task.completed).length || 0;
+  const pendingTasks = totalTasks - completedTasks
 
   return (
     <div className="card">
       <h1>Todo List</h1>
+      <input
+        type="date"
+        value={selectedDate}
+        onChange={handleDateChange}
+        className="dateInput"
+      />
+      <div className="task-summary">
+        <p>Total tasks: {totalTasks}</p>
+        <p>Completed tasks: {completedTasks}</p>
+        <p className="pending">Pending tasks:{pendingTasks}</p>
+      </div>
       <AddTodo handleAddTodo={handleAddTodo} />
       <TodoList
-        todoList={todoList}
+        todoList={todoList[selectedDate] || []}
+        editingIndex={editingIndex}
         handleEdit={handleEdit}
+        handleSave={handleSave}
+        handleChange={handleChange}
         handleToggleComplete={handleToggleComplete}
         handleDelete={handleDelete}
       />
